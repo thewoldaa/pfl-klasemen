@@ -1,0 +1,112 @@
+[
+  {
+    "id": "bintang-timur",
+    "name": "Bintang Timur Surabaya",
+    "short": "Bintang Timur",
+    "code": "BTS",
+    "city": "Surabaya",
+    "province": "Jawa Timur",
+    "venue": "GOR UNESA",
+    "founded": 2013,
+    "note": "Juara bertahan PFL 2025/26, gelar kelima."
+  },
+  {
+    "id": "black-steel",
+    "name": "Black Steel Papua",
+    "short": "Black Steel",
+    "code": "BSP",
+    "city": "Manokwari",
+    "province": "Papua Barat",
+    "venue": "Istora Papua Bangkit",
+    "founded": 2014,
+    "note": "Runner-up PFL 2025/26."
+  },
+  {
+    "id": "cosmo-jne",
+    "name": "Cosmo JNE FC",
+    "short": "Cosmo JNE",
+    "code": "COS",
+    "city": "Jakarta",
+    "province": "DKI Jakarta",
+    "venue": "GOR POPKI Cibubur",
+    "founded": 2014,
+    "note": "Runner-up Grand Final PFL 2025/26."
+  },
+  {
+    "id": "halus",
+    "name": "Halus FC",
+    "short": "Halus",
+    "code": "HAL",
+    "city": "Jakarta",
+    "province": "DKI Jakarta",
+    "venue": "GOR POPKI Cibubur",
+    "founded": 2015,
+    "note": "Bertahan di kasta tertinggi sejak promosi 2024/25."
+  },
+  {
+    "id": "kuda-laut",
+    "name": "Kuda Laut Nusantara FC",
+    "short": "Kuda Laut Nusantara",
+    "code": "KLN",
+    "city": "Jakarta",
+    "province": "DKI Jakarta",
+    "venue": "GOR POPKI Cibubur",
+    "founded": 2021,
+    "note": "Promosi dari Liga Futsal Nusantara 2024."
+  },
+  {
+    "id": "mimika",
+    "name": "Mimika FC",
+    "short": "Mimika",
+    "code": "MIM",
+    "city": "Timika",
+    "province": "Papua Tengah",
+    "venue": "GOR POPKI Cibubur",
+    "founded": 2018,
+    "note": "Eks Raybit FC. Debut PFL musim ini."
+  },
+  {
+    "id": "nanzaby",
+    "name": "NZ Laksamana Laut",
+    "short": "Laksamana Laut",
+    "code": "NZL",
+    "city": "Bintan",
+    "province": "Kepulauan Riau",
+    "venue": "GOR POPKI Cibubur",
+    "founded": 2023,
+    "note": "Eks Nanzaby Family FC, mewarisi slot Sadakata United."
+  },
+  {
+    "id": "pangsuma",
+    "name": "Pangsuma FC Kalbar",
+    "short": "Pangsuma",
+    "code": "PAN",
+    "city": "Pontianak",
+    "province": "Kalimantan Barat",
+    "venue": "GOR Terpadu Ahmad Yani",
+    "founded": 2019,
+    "note": "Semi-finalis Elite 8 PFL 2025/26."
+  },
+  {
+    "id": "proton",
+    "name": "Proton FC",
+    "short": "Proton",
+    "code": "PRO",
+    "city": "Kuningan",
+    "province": "Jawa Barat",
+    "venue": "GOR POPKI Cibubur",
+    "founded": 2016,
+    "note": "Juara PFL 2 2026. Debut PFL musim ini."
+  },
+  {
+    "id": "unggul",
+    "name": "Unggul FC Malang",
+    "short": "Unggul",
+    "code": "UNG",
+    "city": "Malang",
+    "province": "Jawa Timur",
+    "venue": "GOR Ken Arok",
+    "founded": 2013,
+    "note": "Pencetak gol terbanyak PFL 2025/26 lewat Wellington Pereira."
+  }
+]

@@ -1,0 +1,61 @@
+name: Pemeriksaan harian
+
+# Tiga tugas:
+#   1. memeriksa integritas data dan membangun ulang klasemen
+#   2. menolak merge bila ada angka yang tidak bisa direproduksi
+#   3. menandai data yang belum diperbarui lebih dari 36 jam
+
+on:
+  schedule:
+    # 06:00 WIB setiap hari (23:00 UTC hari sebelumnya)
+    - cron: '0 23 * * *'
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Bangun dan periksa
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Bangun klasemen dari hasil
+        run: node scripts/build.mjs
+
+      - name: Periksa integritas
+        run: node scripts/verify.mjs
+
+      - name: Uji mesin pencarian dan aturan liga
+        run: node scripts/test.mjs
+
+      - name: Periksa kesegaran data
+        run: node scripts/freshness.mjs
+
+      - name: Simpan hasil build
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        run: |
+          if [[ -n "$(git status --porcelain data dist)" ]]; then
+            echo "changed=true" >> "$GITHUB_ENV"
+          fi
+
+      - name: Commit klasemen terbaru
+        if: env.changed == 'true'
+        run: |
+          git config user.name  "pfl-bot"
+          git config user.email "pfl-bot@users.noreply.github.com"
+          git add data dist
+          git commit -m "chore(data): bangun ulang klasemen $(date -u +%Y-%m-%d)"
+          git push

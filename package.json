@@ -1,0 +1,17 @@
+{
+  "name": "pfl-klasemen",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Papan klasemen Pro Futsal League Indonesia — dihitung dari hasil pertandingan, tidak pernah diketik manual.",
+  "license": "MIT",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs",
+    "serve": "node scripts/serve.mjs",
+    "check": "npm run build && npm run verify"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

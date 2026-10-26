@@ -1,0 +1,104 @@
+/* ============================================================================
+   PFL Klasemen — tokens
+   Gaya: "Accent ladder" (taste-skill app sheet), hue diambil dari dunia subjeknya.
+   Warna penuh hanya untuk tanda kecil: tombol utama, garis data, penanda aktif.
+   Sisanya tint pucat dari hue yang sama.
+   ========================================================================== */
+
+:root {
+  /* ---- ground & surface */
+  --ground: #fbf9f8;
+  --surface: #ffffff;
+  --raised: #f5f2f0;
+  --sunken: #efeae7;
+  --border: #e6e0dc;
+  --rule: #f0ebe8;
+  --control: #cfc6c0;
+
+  /* ---- ink */
+  --text: #16110f;
+  --muted: #5d544f;
+  --faint: #6f645e;
+
+  /* ---- hue: merah PFL */
+  --accent: #c22036;
+  --accent-soft: #fdf1f2;
+  --accent-track: #f7d9dd;
+  --accent-ink: #76101f;
+  --accent-hover: #a5172b;
+
+  /* ---- status (tint pucat + tinta gelap, tidak pernah putih di atas warna) */
+  --positive: #1f6f4a;
+  --pill-positive-bg: #e2f3e8;
+  --pill-positive-ink: #0c3d26;
+  --negative: #b21f2d;
+  --pill-negative-bg: #fdeaec;
+  --pill-negative-ink: #7a1119;
+  --pill-warning-bg: #fdf4e3;
+  --pill-warning-ink: #7a4a09;
+  --pill-neutral-bg: #f1edea;
+  --pill-neutral-ink: #4a423d;
+  --pill-accent-bg: #fdf1f2;
+  --pill-accent-ink: #76101f;
+
+  /* ---- bentuk: satu radius, satu sudut terpotong (motif lapangan futsal) */
+  --radius-card: 10px;
+  --radius-control: 7px;
+  --radius-chip: 4px;
+  --chamfer: 12px;
+
+  /* ---- jarak */
+  --gap: 20px;
+  --gap-lg: 32px;
+  --pad: 24px;
+  --gutter: 32px;
+  --row-height: 46px;
+  --control-height: 36px;
+
+  /* ---- tipe */
+  --font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-display: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+  --fs-title: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --fs-section: 17px;
+  --fs-kpi: clamp(1.5rem, 1.3rem + 0.8vw, 1.875rem);
+  --fs-body: 15px;
+  --fs-small: 13px;
+  --fs-micro: 11px;
+
+  --shadow-float: 0 1px 2px rgba(22, 17, 15, 0.05), 0 4px 14px -6px rgba(22, 17, 15, 0.10);
+}
+
+:root[data-theme="dark"] {
+  --ground: #111111;
+  --surface: #191919;
+  --raised: #222222;
+  --sunken: #0a0a0a;
+  --border: #2e2e2e;
+  --rule: #1f1f1f;
+  --control: #4a4a4a;
+
+  --text: #f7f7f7;
+  --muted: #b4b4b4;
+  --faint: #949494;
+
+  --accent: #ff5a6e;
+  --accent-soft: #2a1418;
+  --accent-track: #4a1c23;
+  --accent-ink: #ffd3d9;
+  --accent-hover: #ff7c8c;
+
+  --positive: #5fd39b;
+  --pill-positive-bg: #122a1f;
+  --pill-positive-ink: #5fd39b;
+  --negative: #ff7a86;
+  --pill-negative-bg: #2e1418;
+  --pill-negative-ink: #ff7a86;
+  --pill-warning-bg: #2c2110;
+  --pill-warning-ink: #f0c078;
+  --pill-neutral-bg: #242424;
+  --pill-neutral-ink: #cfcfcf;
+  --pill-accent-bg: #2a1418;
+  --pill-accent-ink: #ff9aa7;
+
+  --shadow-float: 0 1px 2px rgba(0, 0, 0, 0.35), 0 4px 14px -6px rgba(0, 0, 0, 0.5);
+}

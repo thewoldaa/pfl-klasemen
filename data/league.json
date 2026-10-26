@@ -1,0 +1,31 @@
+{
+  "name": "Pro Futsal League Indonesia",
+  "shortName": "PFL",
+  "season": "2026/2027",
+  "seasonId": "2026-27",
+  "organiser": "Federasi Futsal Indonesia",
+  "timezone": "Asia/Jakarta",
+  "utcOffset": "+07:00",
+  "points": { "win": 3, "draw": 1, "loss": 0 },
+  "tiebreakers": ["points", "goalDifference", "goalsFor", "headToHead", "wins"],
+  "qualification": {
+    "finalFour": 4,
+    "note": "Empat tim teratas lolos ke Final Four. Tidak ada degradasi musim ini."
+  },
+  "structure": {
+    "regularRounds": 18,
+    "matchesPerTeam": 18,
+    "totalMatches": 90,
+    "format": "Round robin dua putaran (kandang-tandang)"
+  },
+  "sources": [
+    {
+      "label": "Skor.id — Jadwal, Hasil dan Klasemen PFL 2026/2027",
+      "url": "https://skor.id/posts/785481/pro-futsal-league-2026-2027-jadwal-hasil-dan-klasemen-lengkap"
+    },
+    {
+      "label": "G-Sports — Rekap Pekan 2 PFL 2026/2027",
+      "url": "https://g-sports.id/2026/10/04/pekan-2-pfl-2026-2027-bintang-timur-surabaya-puncaki-klasemen/"
+    }
+  ]
+}

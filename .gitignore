@@ -1,0 +1,7 @@
+node_modules/
+.inspect/
+.inspect-light/
+.taste-skill/
+*.log
+.DS_Store
+Thumbs.db

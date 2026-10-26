@@ -1,0 +1,228 @@
+{
+  "generatedAt": "2026-10-26T10:50:17.735Z",
+  "season": "2026/2027",
+  "points": {
+    "win": 3,
+    "draw": 1,
+    "loss": 0
+  },
+  "table": [
+    {
+      "rank": 1,
+      "teamId": "bintang-timur",
+      "name": "Bintang Timur Surabaya",
+      "code": "BTS",
+      "played": 4,
+      "won": 4,
+      "drawn": 0,
+      "lost": 0,
+      "goalsFor": 20,
+      "goalsAgainst": 7,
+      "goalDifference": 13,
+      "points": 12,
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "rank": 2,
+      "teamId": "proton",
+      "name": "Proton FC",
+      "code": "PRO",
+      "played": 4,
+      "won": 3,
+      "drawn": 0,
+      "lost": 1,
+      "goalsFor": 17,
+      "goalsAgainst": 7,
+      "goalDifference": 10,
+      "points": 9,
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W"
+      ]
+    },
+    {
+      "rank": 3,
+      "teamId": "pangsuma",
+      "name": "Pangsuma FC Kalbar",
+      "code": "PAN",
+      "played": 3,
+      "won": 3,
+      "drawn": 0,
+      "lost": 0,
+      "goalsFor": 14,
+      "goalsAgainst": 7,
+      "goalDifference": 7,
+      "points": 9,
+      "form": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "rank": 4,
+      "teamId": "black-steel",
+      "name": "Black Steel Papua",
+      "code": "BSP",
+      "played": 3,
+      "won": 3,
+      "drawn": 0,
+      "lost": 0,
+      "goalsFor": 8,
+      "goalsAgainst": 3,
+      "goalDifference": 5,
+      "points": 9,
+      "form": [
+        "W",
+        "W",
+        "W"
+      ]
+    },
+    {
+      "rank": 5,
+      "teamId": "kuda-laut",
+      "name": "Kuda Laut Nusantara FC",
+      "code": "KLN",
+      "played": 4,
+      "won": 1,
+      "drawn": 1,
+      "lost": 2,
+      "goalsFor": 5,
+      "goalsAgainst": 6,
+      "goalDifference": -1,
+      "points": 4,
+      "form": [
+        "W",
+        "L",
+        "D",
+        "L"
+      ]
+    },
+    {
+      "rank": 6,
+      "teamId": "mimika",
+      "name": "Mimika FC",
+      "code": "MIM",
+      "played": 4,
+      "won": 1,
+      "drawn": 0,
+      "lost": 3,
+      "goalsFor": 12,
+      "goalsAgainst": 11,
+      "goalDifference": 1,
+      "points": 3,
+      "form": [
+        "L",
+        "L",
+        "L",
+        "W"
+      ]
+    },
+    {
+      "rank": 7,
+      "teamId": "cosmo-jne",
+      "name": "Cosmo JNE FC",
+      "code": "COS",
+      "played": 3,
+      "won": 1,
+      "drawn": 0,
+      "lost": 2,
+      "goalsFor": 8,
+      "goalsAgainst": 12,
+      "goalDifference": -4,
+      "points": 3,
+      "form": [
+        "L",
+        "W",
+        "L"
+      ]
+    },
+    {
+      "rank": 8,
+      "teamId": "unggul",
+      "name": "Unggul FC Malang",
+      "code": "UNG",
+      "played": 3,
+      "won": 1,
+      "drawn": 0,
+      "lost": 2,
+      "goalsFor": 4,
+      "goalsAgainst": 8,
+      "goalDifference": -4,
+      "points": 3,
+      "form": [
+        "L",
+        "W",
+        "L"
+      ]
+    },
+    {
+      "rank": 9,
+      "teamId": "halus",
+      "name": "Halus FC",
+      "code": "HAL",
+      "played": 4,
+      "won": 0,
+      "drawn": 1,
+      "lost": 3,
+      "goalsFor": 5,
+      "goalsAgainst": 14,
+      "goalDifference": -9,
+      "points": 1,
+      "form": [
+        "L",
+        "L",
+        "D",
+        "L"
+      ]
+    },
+    {
+      "rank": 10,
+      "teamId": "nanzaby",
+      "name": "NZ Laksamana Laut",
+      "code": "NZL",
+      "played": 4,
+      "won": 0,
+      "drawn": 0,
+      "lost": 4,
+      "goalsFor": 6,
+      "goalsAgainst": 24,
+      "goalDifference": -18,
+      "points": 0,
+      "form": [
+        "L",
+        "L",
+        "L",
+        "L"
+      ]
+    }
+  ],
+  "summary": {
+    "matchesPlayed": 18,
+    "matchesTotal": 63,
+    "goals": 99,
+    "goalsPerMatch": 5.5,
+    "lastFinishedWeek": 2,
+    "nextMatch": {
+      "id": "W03-M01",
+      "week": 3,
+      "date": "2026-10-31",
+      "time": "09:00",
+      "home": "proton",
+      "away": "kuda-laut",
+      "homeScore": null,
+      "awayScore": null,
+      "venue": "GOR POPKI Cibubur",
+      "city": "Jakarta",
+      "status": "scheduled"
+    },
+    "leader": "bintang-timur"
+  }
+}
