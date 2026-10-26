@@ -245,7 +245,8 @@ export function parseQuery(rawQuery, ctx = {}) {
   const q = normalize(rawQuery);
   if (!q) return { kind: 'empty', raw: rawQuery };
 
-  const today = ctx.today || new Date();
+  // "hari ini" berarti hari ini di Jakarta, bukan di zona waktu mesin.
+  const today = jakartaToday(ctx.today);
 
   // tanggal ISO
   let m = q.match(/\b(\d{4})-(\d{1,2})-(\d{1,2})\b/);
@@ -289,21 +290,29 @@ function pad(n) {
   return String(n).padStart(2, '0');
 }
 
+/**
+ * Tanggal kalender di Asia/Jakarta (UTC+7) untuk sebuah momen.
+ * Dipakai agar "hari ini" tidak bergeser satu hari ketika CI berjalan di UTC.
+ * Mengembalikan Date dalam UTC yang mewakili tengah malam Jakarta.
+ */
+export function jakartaToday(when = new Date()) {
+  const shifted = new Date(when.getTime() + 7 * 3600 * 1000);
+  return new Date(Date.UTC(shifted.getUTCFullYear(), shifted.getUTCMonth(), shifted.getUTCDate()));
+}
+
 function isoDate(d) {
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
 }
 
 function addDays(d, n) {
-  const c = new Date(d.getTime());
-  c.setDate(c.getDate() + n);
-  return c;
+  return new Date(d.getTime() + n * 86400000);
 }
 
 /** Pilih tahun yang paling masuk akal untuk tanggal tanpa tahun. */
 function pickYear(day, monthIndex, today) {
-  const y = today.getFullYear();
-  const candidate = new Date(y, monthIndex, day);
-  const diff = candidate.getTime() - today.getTime();
+  const y = today.getUTCFullYear();
+  const candidate = Date.UTC(y, monthIndex, day);
+  const diff = candidate - today.getTime();
   if (diff < -180 * 86400000) return y + 1;
   return y;
 }
