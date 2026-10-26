@@ -16,6 +16,8 @@ import {
   kickoffUtc,
   normalize,
   weekRecap,
+  teamProfile,
+  headToHeadFull,
 } from './modules/engine.mjs';
 
 const $ = (sel, root = document) => root.querySelector(sel);
@@ -486,6 +488,7 @@ function renderTeams() {
       const row = byId.get(t.id);
       const selected = state.selectedTeam === t.id;
       return `
+      <div class="team-card-wrap">
       <button class="team-card" type="button" data-team="${esc(t.id)}" aria-pressed="${selected}">
         <span class="team-card__head">
           <span class="mono-mark" aria-hidden="true">${esc(initials(t))}</span>
@@ -499,7 +502,9 @@ function renderTeams() {
           <span class="team-card__figure"><span>Poin</span><strong>${row ? row.points : '—'}</strong></span>
           <span class="team-card__figure"><span>Selisih</span><strong>${row ? signed(row.goalDifference) : '—'}</strong></span>
         </span>
-      </button>`;
+      </button>
+      <a class="team-card__more" href="tim.html?team=${encodeURIComponent(t.id)}">Detail tim<span aria-hidden="true"> →</span></a>
+      </div>`;
     })
     .join('');
 

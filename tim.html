@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Detail tim — PFL Klasemen</title>
+<meta name="description" content="Profil satu klub Pro Futsal League Indonesia: rekor, hasil per lawan, lintasan peringkat, dan head-to-head penuh.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles/tokens.css">
+<link rel="stylesheet" href="assets/styles/app.css">
+<script>
+  (function () {
+    try {
+      var forced = new URLSearchParams(location.search).get('theme');
+      var saved = localStorage.getItem('pfl.theme');
+      var dark = forced ? forced === 'dark' : saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+    } catch (e) {}
+  })();
+</script>
+</head>
+<body>
+<a class="skip-link" href="#main">Lompat ke isi</a>
+
+<div class="shell">
+  <div class="scrim" data-scrim hidden></div>
+
+  <aside class="rail" id="rail" aria-label="Navigasi utama">
+    <a class="brand" href="index.html">
+      <svg class="brand__mark" viewBox="0 0 34 34" fill="none" aria-hidden="true">
+        <path d="M2 32V13A11 11 0 0 1 13 2h19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M9 32V16a7 7 0 0 1 7-7h16" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity=".38"/>
+      </svg>
+      <span class="brand__text">
+        <span class="brand__name">PFL Klasemen</span>
+        <span class="brand__season" id="brandSeason">2026/2027</span>
+      </span>
+    </a>
+
+    <nav class="rail__group" aria-label="Navigasi">
+      <span class="rail__label">Papan</span>
+      <a class="rail__link" href="index.html#klasemen">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 3h12M2 8h12M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Klasemen
+      </a>
+      <a class="rail__link" href="index.html#jadwal">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3.5" width="12" height="10.5" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M2 7h12M5.5 2v3M10.5 2v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Jadwal
+      </a>
+      <a class="rail__link" href="index.html#hasil">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 2.5h7l3 3v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-10a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5l2 2 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Hasil
+      </a>
+      <a class="rail__link" href="index.html#tim" aria-current="true">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="6" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M1.5 13.5a4.5 4.5 0 0 1 9 0M11 3.6a2.5 2.5 0 0 1 0 4.8M12.2 9.4a4.5 4.5 0 0 1 2.3 4.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Tim
+      </a>
+    </nav>
+
+    <div class="rail__foot">
+      <div class="freshness" id="freshness"></div>
+      <button class="btn btn--ghost" id="themeBtn" type="button" style="justify-content:flex-start">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.5v11" stroke="currentColor" stroke-width="1.5"/><path d="M8 2.5a5.5 5.5 0 0 1 0 11Z" fill="currentColor"/></svg>
+        <span id="themeLabel">Mode gelap</span>
+      </button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="topbar__menu" id="menuBtn" type="button" aria-label="Buka navigasi" aria-expanded="false" aria-controls="rail">
+        <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M2.5 4.5h13M2.5 9h13M2.5 13.5h13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+
+      <div class="search" id="search">
+        <div class="search__field">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.5" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <input class="search__input" id="searchInput" type="search" autocomplete="off" spellcheck="false"
+                 placeholder="Cari tim, tanggal, atau pekan" aria-label="Cari tim, tanggal, atau pekan"
+                 role="combobox" aria-expanded="false" aria-controls="results">
+          <span class="search__key" aria-hidden="true">/</span>
+          <button class="search__clear" id="searchClear" type="button" aria-label="Hapus pencarian">
+            <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 3l8 8M11 3l-8 8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="results" id="results" role="listbox" aria-label="Hasil pencarian" hidden></div>
+      </div>
+
+      <a class="btn btn--ghost topbar__back" href="index.html" aria-label="Kembali ke papan klasemen">
+        <svg class="topbar__back-icon" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M9.5 3.5L5 8l4.5 4.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="topbar__back-full">Kembali ke papan</span>
+      </a>
+    </header>
+
+    <main class="page" id="main">
+      <div id="teamHeader"></div>
+      <div id="teamBody"></div>
+      <footer class="foot">
+        <span>Angka di halaman ini dihitung dari hasil pertandingan.</span>
+        <span class="foot__links"><a href="index.html#klasemen">Klasemen lengkap</a></span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script type="module" src="assets/team.js"></script>
+</body>
+</html>

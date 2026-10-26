@@ -390,6 +390,16 @@ a { color: inherit; }
 }
 .btn--ghost:hover { background: var(--raised); border-color: var(--control); }
 
+/* Tombol kembali di topbar halaman detail tim: label teks di layar lebar,
+   ikon panah saja di ponsel supaya tetap muat bersama kolom pencarian. */
+.topbar__back { flex: none; white-space: nowrap; gap: 6px; }
+.topbar__back-icon { display: none; width: 16px; height: 16px; }
+@media (max-width: 640px) {
+  .topbar__back-full { display: none; }
+  .topbar__back-icon { display: block; }
+  .topbar__back { padding-inline: 10px; }
+}
+
 .btn--quiet {
   background: none;
   border-color: transparent;
@@ -959,7 +969,6 @@ a { color: inherit; }
     border-right: 1px solid var(--border);
     transform: translateX(-102%);
     transition: transform 200ms cubic-bezier(0.2, 0.7, 0.3, 1);
-    box-shadow: var(--shadow-float);
     height: 100svh;
   }
   .rail[data-open="true"] { transform: none; }
@@ -1056,4 +1065,190 @@ a { color: inherit; }
 
 @media (max-width: 400px) {
   .week-tab { padding: 0 10px; }
+}
+
+/* ============================================================================
+   Halaman detail tim
+   ========================================================================== */
+
+.team-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mono-mark--lg {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 13px;
+}
+
+.figure__value--form {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+}
+
+.team-card-wrap {
+  display: grid;
+  gap: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+.team-card-wrap .team-card {
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+.team-card-wrap:hover { border-color: var(--control); }
+
+.team-card__more {
+  display: block;
+  padding: 10px 16px;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-small);
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+.team-card__more:hover { background: var(--raised); color: var(--text); }
+
+/* tabel ringkas di halaman tim */
+.standings--compact tbody td { height: 44px; }
+.standings--compact .cell-actions { text-align: right; padding-right: 12px; }
+.standings--compact .cell-points { font-size: 14px; }
+
+.table-wrap--pad { padding: 16px 20px; }
+
+/* head-to-head */
+.h2h {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: var(--gap);
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+}
+
+.h2h__side {
+  display: grid;
+  gap: 2px;
+  justify-items: start;
+}
+.h2h__side--right { justify-items: end; text-align: right; }
+
+.h2h__name { font-weight: 600; font-size: 15px; }
+.h2h__score {
+  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.h2h__meta { font-size: var(--fs-micro); color: var(--muted); font-variant-numeric: tabular-nums; }
+
+.h2h__middle {
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  padding: 0 16px;
+  border-left: 1px solid var(--rule);
+  border-right: 1px solid var(--rule);
+  min-width: 140px;
+}
+.h2h__record {
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* lintasan peringkat */
+.traj { display: grid; gap: 8px; }
+.traj__row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr) 44px 64px;
+  align-items: center;
+  gap: 12px;
+  font-size: var(--fs-small);
+}
+.traj__week { color: var(--muted); font-variant-numeric: tabular-nums; }
+.traj__track {
+  height: 10px;
+  background: var(--raised);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.traj__bar {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+}
+.traj__value { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+.traj__meta { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+
+/* gol per pekan */
+.goals { display: grid; gap: 10px; }
+.goals__row {
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  font-size: var(--fs-small);
+}
+.goals__week { color: var(--muted); font-variant-numeric: tabular-nums; }
+.goals__bars { display: grid; gap: 3px; }
+.goals__bar {
+  display: flex;
+  align-items: center;
+  min-width: 24px;
+  height: 14px;
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  transition: width 200ms ease;
+}
+.goals__bar--for { background: var(--accent-track); color: var(--accent-ink); font-weight: 600; }
+.goals__bar--against { background: var(--raised); color: var(--muted); }
+.goals__legend { display: flex; gap: 16px; padding-top: 6px; font-size: var(--fs-micro); color: var(--muted); }
+.legend__swatch--muted { background: var(--control); }
+
+.match__input--wide {
+  width: auto;
+  min-width: 200px;
+  height: var(--control-height);
+  padding: 0 10px;
+  text-align: left;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .h2h {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 16px;
+  }
+  .h2h__middle {
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 10px 0;
+    justify-items: start;
+  }
+  .h2h__side--right { justify-items: start; text-align: left; }
+  .traj__row, .goals__row { grid-template-columns: 64px minmax(0, 1fr) 40px; }
+  .traj__meta { display: none; }
+  .standings--compact .cell-actions .btn { padding: 0 4px; font-size: 12px; }
 }

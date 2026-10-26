@@ -10,7 +10,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { computeStandings, isPlayed, validate } from '../assets/modules/engine.mjs';
+import { computeStandings, isPlayed, validate, teamProfile, headToHeadFull } from '../assets/modules/engine.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const readJson = async (p) => JSON.parse(await fs.readFile(p, 'utf8'));
@@ -103,6 +103,42 @@ async function main() {
     seen.add(key);
   }
   if (!checks.some((c) => c.name === 'pasangan kandang-tandang')) pass('pasangan kandang-tandang');
+
+  /* 9. halaman detail tim tidak boleh memuat angka yang bertentangan */
+  const profileProblems = [];
+  for (const team of teams) {
+    const p = teamProfile(teams, matches, team.id);
+    if (!p) {
+      profileProblems.push(`${team.id}: profil kosong`);
+      continue;
+    }
+    const row = recomputed.find((r) => r.teamId === team.id);
+    if (p.record.played !== row.played) profileProblems.push(`${team.id}: main ${p.record.played} ≠ ${row.played}`);
+    if (p.record.goalsFor !== row.goalsFor) profileProblems.push(`${team.id}: gol ${p.record.goalsFor} ≠ ${row.goalsFor}`);
+    if (p.row.rank !== row.rank) profileProblems.push(`${team.id}: peringkat ${p.row.rank} ≠ ${row.rank}`);
+
+    const opponentPlayed = p.opponents.reduce((n, o) => n + o.played, 0);
+    if (opponentPlayed !== p.record.played) {
+      profileProblems.push(`${team.id}: rekap lawan ${opponentPlayed} ≠ ${p.record.played}`);
+    }
+  }
+  profileProblems.length
+    ? fail('profil tim sejalan dengan klasemen', profileProblems.slice(0, 3).join('; '))
+    : pass('profil tim sejalan dengan klasemen');
+
+  /* 10. setiap tim punya lawan untuk panel head-to-head */
+  const h2hProblems = [];
+  for (const team of teams) {
+    const others = teams.filter((t) => t.id !== team.id);
+    const withMeetings = others.filter((o) => {
+      const h = headToHeadFull(teams, matches, team.id, o.id);
+      return h && h.matches.length > 0;
+    });
+    if (!withMeetings.length) h2hProblems.push(`${team.id}: tidak punya lawan dengan pertemuan`);
+  }
+  h2hProblems.length
+    ? fail('head-to-head tersedia untuk semua tim', h2hProblems.join('; '))
+    : pass('head-to-head tersedia untuk semua tim');
 
   /* laporan */
   const width = Math.max(...checks.map((c) => c.name.length));

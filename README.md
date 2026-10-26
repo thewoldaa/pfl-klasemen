@@ -26,6 +26,8 @@ Kalau hasilnya berbeda dari tabel yang diterbitkan, yang salah adalah tabelnya �
 - **Klasemen** dengan penanda Final Four, bentuk lima laga terakhir, dan sorotan tim.
 - **Pencarian** yang mengerti nama tim, kota, kode tim, tanggal (`31 Oktober`, `31/10`, `2026-10-31`), nomor pekan (`pekan 3`), pasangan (`proton vs pangsuma`), dan kata relatif (`hari ini`, `besok`). Salah ketik ringan ditoleransi.
 - **Jadwal per pekan** dengan penanda laga yang belum dimainkan.
+- **Halaman detail tim** (`tim.html?team=bintang-timur`): rekap hasil per lawan, head-to-head penuh dengan lawan pilihan (agregat gol, W–D–L, setiap pertemuan), lintasan peringkat per pekan, gol memasukkan dan kemasukan per pekan, semua laga, laga berikutnya, serta kemenangan dan kekalahan terbesar.
+- **Sinkronisasi hasil mingguan** dari halaman sumber, dengan pengaman: hanya menambah hasil, tidak pernah menimpa tanpa `--force`, dan menolak menulis kalau validasi gagal.
 - **Input skor lokal**: masukkan skor, klasemen berubah seketika. Perubahan itu hanya tersimpan di peramban sampai halaman dimuat ulang — lihat catatan di bawah.
 - **Mode gelap**, tabel yang menjadi daftar di ponsel, dan tautan langsung (`?q=bintang`).
 
@@ -36,6 +38,7 @@ npm run build     # validasi data, hitung klasemen, tulis data/standings.json + 
 npm run verify    # periksa ulang hasil build secara independen
 node scripts/test.mjs
 npm run serve     # http://localhost:4173
+npm run sync      # tarik hasil pekan terbaru dari halaman sumber (dry-run)
 ```
 
 Tidak ada dependensi. Hanya Node 20 atau lebih baru.
@@ -50,14 +53,18 @@ data/
   standings.json    hasil hitungan (dibuat, jangan disunting)
 assets/
   modules/engine.mjs  aturan liga + mesin pencarian (dipakai Node dan peramban)
-  app.js              antarmuka
+  app.js              antarmuka papan
+  team.js             antarmuka halaman detail tim
   styles/             token dan komponen
+tim.html              halaman detail tim
 scripts/
   build.mjs         validasi → hitung → tulis
   verify.mjs        pemeriksaan independen
   test.mjs          uji perilaku
   freshness.mjs     pengawas data basi
   serve.mjs         server statis untuk pengembangan
+  sync.mjs          tarik hasil dari sumber mingguan
+  sources/skor.mjs  adaptor pengurai halaman sumber
 .github/workflows/daily.yml
 ```
 
@@ -84,6 +91,24 @@ Sunting `data/matches.json`. Isi `homeScore` dan `awayScore`, ubah `status` menj
 Lalu jalankan `npm run check`. Kalau data diterima, buka pull request. Bot akan membangun ulang klasemen setelah merge.
 
 **Jangan** menyunting `data/standings.json` atau `dist/data.json` — keduanya ditimpa setiap build.
+
+### Menarik hasil mingguan dari sumber
+
+Menyunting JSON dengan tangan rawan salah. `scripts/sync.mjs` membaca halaman sumber, mencocokkan setiap laga ke `data/matches.json`, lalu mengisi skor yang belum ada:
+
+```bash
+npm run sync                  # dry-run: tampilkan apa yang akan berubah, tidak menulis apa pun
+npm run sync:apply            # tulis perubahan ke data/matches.json
+node scripts/sync.mjs --offline halaman.html   # uji adaptor pada salinan halaman
+```
+
+Pengamannya sengaja ketat:
+
+- **Hanya menambah.** Laga yang sudah punya skor tidak pernah ditimpa. Kalau sumber berbeda dari data, sync melaporkan `KONFLIK` dan berhenti — perbedaan itu harus diputuskan manusia, bukan ditelan diam-diam.
+- **Tidak menebak tim.** Laga baru hanya masuk kalau kedua nama timnya dapat dipetakan ke `teams.json` lewat alias. Nama yang tidak dikenal dilaporkan, bukan ditebak.
+- **Tidak menulis data rusak.** Hasil gabungan divalidasi lebih dulu; kalau gagal, berkas tidak disentuh.
+
+Setelah `--apply`, jalankan `npm run check` dan tinjau diff `data/matches.json` sebelum commit. Nama-nama tim di halaman sumber ditulis berbeda-beda antar musim; kalau muncul nama yang belum dikenal, tambahkan ke `TEAM_ALIASES` di `scripts/sources/skor.mjs`.
 
 ### Aturan yang ditegakkan build
 

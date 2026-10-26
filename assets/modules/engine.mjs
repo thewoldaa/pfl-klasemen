@@ -539,3 +539,138 @@ export function validate(teams, matches) {
 
   return problems;
 }
+
+/* ------------------------------------------------------- detail satu tim */
+
+/**
+ * Profil lengkap satu tim untuk halaman detail.
+ * Semua angka diturunkan dari daftar laga; tidak ada yang diketik.
+ */
+export function teamProfile(teams, matches, teamId) {
+  const team = teams.find((t) => t.id === teamId);
+  if (!team) return null;
+
+  const played = matches.filter(isPlayed);
+  const own = played.filter((m) => m.home === teamId || m.away === teamId);
+  const upcoming = matches
+    .filter((m) => !isPlayed(m) && (m.home === teamId || m.away === teamId))
+    .sort((a, b) => dateKey(a.date) - dateKey(b.date) || a.time.localeCompare(b.time));
+
+  let goalsFor = 0;
+  let goalsAgainst = 0;
+  let won = 0;
+  let drawn = 0;
+  let lost = 0;
+  let biggestWin = null;
+  let biggestLoss = null;
+  const goalsByWeek = [];
+
+  const byWeek = new Map();
+  for (const m of own) {
+    const isHome = m.home === teamId;
+    const gf = isHome ? m.homeScore : m.awayScore;
+    const ga = isHome ? m.awayScore : m.homeScore;
+    goalsFor += gf;
+    goalsAgainst += ga;
+
+    if (gf > ga) won++;
+    else if (gf < ga) lost++;
+    else drawn++;
+
+    const opponent = isHome ? m.away : m.home;
+    const margin = gf - ga;
+    if (margin > 0 && (!biggestWin || margin > biggestWin.margin)) {
+      biggestWin = { match: m, opponent, margin, gf, ga };
+    }
+    if (margin < 0 && (!biggestLoss || margin < biggestLoss.margin)) {
+      biggestLoss = { match: m, opponent, margin, gf, ga };
+    }
+
+    if (!byWeek.has(m.week)) byWeek.set(m.week, { week: m.week, gf: 0, ga: 0, matches: 0 });
+    const w = byWeek.get(m.week);
+    w.gf += gf;
+    w.ga += ga;
+    w.matches++;
+  }
+
+  for (const week of [...byWeek.keys()].sort((a, b) => a - b)) goalsByWeek.push(byWeek.get(week));
+
+  // hasil per lawan
+  const opponents = new Map();
+  for (const m of own) {
+    const isHome = m.home === teamId;
+    const opponent = isHome ? m.away : m.home;
+    const gf = isHome ? m.homeScore : m.awayScore;
+    const ga = isHome ? m.awayScore : m.homeScore;
+    if (!opponents.has(opponent)) {
+      opponents.set(opponent, { teamId: opponent, played: 0, won: 0, drawn: 0, lost: 0, gf: 0, ga: 0, matches: [] });
+    }
+    const rec = opponents.get(opponent);
+    rec.played++;
+    rec.gf += gf;
+    rec.ga += ga;
+    if (gf > ga) rec.won++;
+    else if (gf < ga) rec.lost++;
+    else rec.drawn++;
+    rec.matches.push(m);
+  }
+
+  const standings = computeStandings(teams, matches);
+  const row = standings.find((r) => r.teamId === teamId) || null;
+
+  // posisi poin di antara semua tim per pekan (lintasan)
+  const weeks = [...new Set(matches.map((m) => m.week))].sort((a, b) => a - b);
+  const trajectory = [];
+  for (const week of weeks) {
+    const through = matches.filter((m) => m.week <= week);
+    if (!through.some(isPlayed)) continue;
+    const table = computeStandings(teams, through);
+    const position = table.findIndex((r) => r.teamId === teamId) + 1;
+    if (position > 0) trajectory.push({ week, position, points: table.find((r) => r.teamId === teamId).points });
+  }
+
+  return {
+    team,
+    row,
+    record: { played: own.length, won, drawn, lost, goalsFor, goalsAgainst, goalDifference: goalsFor - goalsAgainst },
+    matches: own.sort((a, b) => dateKey(a.date) - dateKey(b.date)),
+    upcoming,
+    biggestWin,
+    biggestLoss,
+    goalsByWeek,
+    opponents: [...opponents.values()].sort((a, b) => b.played - a.played),
+    trajectory,
+    form: row ? row.form : [],
+  };
+}
+
+/** Semua pertemuan dua tim, kronologis, plus rekap. */
+export function headToHeadFull(teams, matches, teamA, teamB) {
+  const a = teams.find((t) => t.id === teamA);
+  const b = teams.find((t) => t.id === teamB);
+  if (!a || !b) return null;
+
+  const all = matches
+    .filter((m) => (m.home === teamA && m.away === teamB) || (m.home === teamB && m.away === teamA))
+    .sort((x, y) => dateKey(x.date) - dateKey(y.date));
+
+  const played = all.filter(isPlayed);
+  let aWins = 0;
+  let bWins = 0;
+  let draws = 0;
+  let aGoals = 0;
+  let bGoals = 0;
+
+  for (const m of played) {
+    const aIsHome = m.home === teamA;
+    const ag = aIsHome ? m.homeScore : m.awayScore;
+    const bg = aIsHome ? m.awayScore : m.homeScore;
+    aGoals += ag;
+    bGoals += bg;
+    if (ag > bg) aWins++;
+    else if (ag < bg) bWins++;
+    else draws++;
+  }
+
+  return { a, b, matches: all, played: played.length, aWins, bWins, draws, aGoals, bGoals, pending: all.length - played.length };
+}

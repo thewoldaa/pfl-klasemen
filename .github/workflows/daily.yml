@@ -1,7 +1,7 @@
 name: Pemeriksaan harian
 
 # Tiga tugas:
-#   1. memeriksa integritas data dan membangun ulang klasemen
+#   1. menarik hasil terbaru dari sumber, lalu memeriksa integritas data
 #   2. menolak merge bila ada angka yang tidak bisa direproduksi
 #   3. menandai data yang belum diperbarui lebih dari 36 jam
 
@@ -31,6 +31,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      # Hanya pada jadwal: tarik hasil pekan terbaru dari halaman sumber.
+      # Sync tidak pernah menimpa skor yang sudah ada dan tidak menulis apa pun
+      # bila hasil gabungan gagal validasi, jadi langkah ini aman diulang.
+      # Kegagalan jaringan atau perubahan struktur halaman tidak menggagalkan
+      # alur kerja — data lama tetap dipakai dan kesegaran yang akan menandai.
+      - name: Tarik hasil terbaru dari sumber
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        run: node scripts/sync.mjs
 
       - name: Bangun klasemen dari hasil
         run: node scripts/build.mjs

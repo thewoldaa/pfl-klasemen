@@ -13,6 +13,8 @@ import { fileURLToPath } from 'node:url';
 import {
   computeStandings,
   headToHead,
+  headToHeadFull,
+  teamProfile,
   isPlayed,
   parseQuery,
   search,
@@ -319,6 +321,95 @@ test('cari kata yang tidak ada memberi catatan kosong', () => {
 test('cari nama venue menemukan semua laga di sana', () => {
   const r = search(index, teams, matches, 'gor popki', { today: TODAY });
   ok(r.matches.length >= 9, 'minimal sembilan laga di GOR POPKI');
+});
+
+/* ------------------------------------------------- uji: profil satu tim */
+
+test('profil tim menghitung rekor dari hasil, bukan dari tabel', () => {
+  const p = teamProfile(teams, matches, 'bintang-timur');
+  const row = computeStandings(teams, matches).find((r) => r.teamId === 'bintang-timur');
+  eq(p.record.played, row.played, 'jumlah main');
+  eq(p.record.won, row.won, 'menang');
+  eq(p.record.goalsFor, row.goalsFor, 'gol memasukkan');
+  eq(p.record.goalsAgainst, row.goalsAgainst, 'gol kemasukan');
+  eq(p.record.goalDifference, row.goalDifference, 'selisih gol');
+  eq(p.row.rank, row.rank, 'peringkat');
+});
+
+test('profil tim mengembalikan null untuk tim yang tidak ada', () => {
+  eq(teamProfile(teams, matches, 'tidak-ada'), null);
+});
+
+test('rekap per lawan menjumlah tepat ke rekor tim', () => {
+  for (const team of teams) {
+    const p = teamProfile(teams, matches, team.id);
+    const sum = (key) => p.opponents.reduce((n, o) => n + o[key], 0);
+    eq(sum('played'), p.record.played, `${team.id}: jumlah laga`);
+    eq(sum('gf'), p.record.goalsFor, `${team.id}: gol memasukkan`);
+    eq(sum('ga'), p.record.goalsAgainst, `${team.id}: gol kemasukan`);
+  }
+});
+
+test('laga tim dan laga berikutnya tidak pernah tumpang tindih', () => {
+  for (const team of teams) {
+    const p = teamProfile(teams, matches, team.id);
+    ok(p.matches.every(isPlayed), `${team.id}: semua laga yang dimainkan punya skor`);
+    ok(p.upcoming.every((m) => !isPlayed(m)), `${team.id}: semua laga berikutnya belum dimainkan`);
+  }
+});
+
+test('lintasan peringkat tidak pernah memuat pekan tanpa hasil', () => {
+  const p = teamProfile(teams, matches, 'proton');
+  ok(p.trajectory.length > 0, 'ada minimal satu pekan selesai');
+  for (const t of p.trajectory) {
+    ok(t.position >= 1 && t.position <= teams.length, `posisi ${t.position} di luar rentang`);
+  }
+});
+
+test('lintasan peringkat monoton mengikuti klasemen yang dibangun ulang', () => {
+  const p = teamProfile(teams, matches, 'bintang-timur');
+  for (const t of p.trajectory) {
+    const through = matches.filter((m) => m.week <= t.week);
+    const expected = computeStandings(teams, through).findIndex((r) => r.teamId === 'bintang-timur') + 1;
+    eq(t.position, expected, `pekan ${t.week}`);
+  }
+});
+
+/* -------------------------------------------------- uji: head-to-head penuh */
+
+test('head-to-head penuh searah dengan headToHead ringkas', () => {
+  for (const a of teams) {
+    for (const b of teams) {
+      if (a.id === b.id) continue;
+      const full = headToHeadFull(teams, matches, a.id, b.id);
+      const brief = headToHead(teams, matches, a.id, b.id);
+      eq(full.aWins, brief.aWins, `${a.id}-${b.id}: kemenangan`);
+      eq(full.bWins, brief.bWins, `${a.id}-${b.id}: kekalahan`);
+      eq(full.aGoals, brief.aGoals, `${a.id}-${b.id}: gol`);
+      // headToHead hanya mengembalikan laga selesai; versi penuh juga memuat yang menanti.
+      eq(full.played, brief.matches.length, `${a.id}-${b.id}: laga selesai`);
+      ok(full.matches.length >= brief.matches.length, `${a.id}-${b.id}: versi penuh tidak boleh lebih sedikit`);
+    }
+  }
+});
+
+test('head-to-head penuh hanya memuat laga kedua tim itu', () => {
+  const h = headToHeadFull(teams, matches, 'bintang-timur', 'cosmo-jne');
+  ok(h.matches.length > 0, 'mereka pernah bertemu');
+  for (const m of h.matches) {
+    const pair = [m.home, m.away].sort().join('|');
+    eq(pair, ['bintang-timur', 'cosmo-jne'].sort().join('|'), `laga ${m.id} bukan pertemuan keduanya`);
+  }
+});
+
+test('head-to-head penuh membagi main dan menanti dengan benar', () => {
+  const h = headToHeadFull(teams, matches, 'bintang-timur', 'cosmo-jne');
+  eq(h.played + h.pending, h.matches.length, 'selesai + menanti = total');
+  eq(h.played, h.aWins + h.draws + h.bWins, 'hasil = jumlah laga selesai');
+});
+
+test('head-to-head penuh mengembalikan null untuk tim yang tidak ada', () => {
+  eq(headToHeadFull(teams, matches, 'bintang-timur', 'tidak-ada'), null);
 });
 
 /* ------------------------------------------------------------- laporan */

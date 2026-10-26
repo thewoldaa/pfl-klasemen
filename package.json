@@ -9,7 +9,10 @@
     "build": "node scripts/build.mjs",
     "verify": "node scripts/verify.mjs",
     "serve": "node scripts/serve.mjs",
-    "check": "npm run build && npm run verify"
+    "test": "node scripts/test.mjs",
+    "sync": "node scripts/sync.mjs --dry-run",
+    "sync:apply": "node scripts/sync.mjs",
+    "check": "npm run build && npm run verify && npm run test"
   },
   "engines": {
     "node": ">=20"
